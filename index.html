@@ -3,221 +3,616 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Project Proposal: Institute Learning Platform</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Institute Platform — Project Proposal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        body { font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
-        .gradient-text { background: linear-gradient(90deg, #2563eb, #7c3aed); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .phase-card:hover { transform: translateY(-5px); transition: all 0.3s ease; }
-        .step-line::before { content: ''; position: absolute; left: 20px; top: 0; bottom: 0; width: 2px; background: #e5e7eb; z-index: 0; }
+        :root {
+            --bg: #0b0f1a;
+            --surface: #111827;
+            --card: #161f2e;
+            --border: #1f2d42;
+            --accent: #3b82f6;
+            --accent2: #8b5cf6;
+            --accent3: #10b981;
+            --warn: #f59e0b;
+            --text: #e2e8f0;
+            --muted: #64748b;
+            --heading: #f8fafc;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+        }
+        h1,h2,h3,h4 { font-family: 'Syne', sans-serif; color: var(--heading); }
+
+        /* --- NOISE OVERLAY --- */
+        body::before {
+            content: '';
+            position: fixed; inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+            pointer-events: none; z-index: 0; opacity: 0.4;
+        }
+
+        /* --- HEADER --- */
+        header {
+            position: sticky; top: 0; z-index: 100;
+            background: rgba(11,15,26,0.85);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+            padding: 14px 40px;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .logo { display: flex; align-items: center; gap: 10px; }
+        .logo-icon {
+            width: 36px; height: 36px; border-radius: 10px;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            display: flex; align-items: center; justify-content: center;
+            font-size: 16px; color: #fff;
+        }
+        .logo-text { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.1rem; }
+        .logo-text span { color: var(--accent); }
+        nav { display: flex; gap: 28px; }
+        nav a {
+            color: var(--muted); font-size: 0.85rem; font-weight: 500;
+            text-decoration: none; transition: color 0.2s;
+        }
+        nav a:hover { color: var(--text); }
+        .btn-primary {
+            background: var(--accent); color: #fff;
+            border: none; padding: 9px 22px; border-radius: 50px;
+            font-family: 'Syne', sans-serif; font-weight: 600; font-size: 0.85rem;
+            cursor: pointer; transition: background 0.2s;
+            text-decoration: none;
+        }
+        .btn-primary:hover { background: #2563eb; }
+
+        /* --- HERO --- */
+        .hero {
+            text-align: center;
+            padding: 100px 40px 60px;
+            position: relative;
+        }
+        .hero::before {
+            content: '';
+            position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+            width: 700px; height: 400px;
+            background: radial-gradient(ellipse at center, rgba(59,130,246,0.12) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .hero-tag {
+            display: inline-block;
+            background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.3);
+            color: var(--accent); padding: 5px 16px; border-radius: 50px;
+            font-size: 0.78rem; font-weight: 600; letter-spacing: 0.1em;
+            text-transform: uppercase; margin-bottom: 24px;
+        }
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800; line-height: 1.1;
+            margin-bottom: 20px;
+        }
+        .grad { background: linear-gradient(90deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero p { color: var(--muted); font-size: 1.1rem; max-width: 580px; margin: 0 auto 40px; line-height: 1.7; }
+        .hero-stats {
+            display: flex; justify-content: center; gap: 48px;
+            border-top: 1px solid var(--border); padding-top: 40px; margin-top: 40px;
+        }
+        .hero-stat { text-align: center; }
+        .hero-stat .val { font-family: 'Syne', sans-serif; font-size: 1.8rem; font-weight: 800; color: var(--accent); }
+        .hero-stat .label { font-size: 0.78rem; color: var(--muted); margin-top: 4px; }
+
+        /* --- SECTION --- */
+        .section { padding: 80px 40px; max-width: 1000px; margin: 0 auto; }
+        .section-title {
+            text-align: center; margin-bottom: 12px;
+            font-size: 2rem; font-weight: 800;
+        }
+        .section-sub { text-align: center; color: var(--muted); margin-bottom: 52px; font-size: 0.95rem; }
+
+        /* --- TECH STACK --- */
+        .tech-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+        .tech-card {
+            background: var(--card); border: 1px solid var(--border);
+            border-radius: 16px; padding: 28px 20px; text-align: center;
+            transition: border-color 0.3s, transform 0.3s;
+        }
+        .tech-card:hover { border-color: var(--accent); transform: translateY(-4px); }
+        .tech-card img { width: 48px; height: 48px; margin-bottom: 14px; }
+        .tech-card h3 { font-size: 1rem; margin-bottom: 6px; }
+        .tech-card p { font-size: 0.82rem; color: var(--muted); line-height: 1.6; }
+
+        /* --- TIMELINE --- */
+        .timeline { position: relative; }
+        .timeline-item { display: flex; gap: 28px; margin-bottom: 32px; position: relative; }
+        .timeline-left { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; width: 52px; }
+        .phase-num {
+            width: 48px; height: 48px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1rem;
+            position: relative; z-index: 1;
+        }
+        .line { width: 2px; flex: 1; background: var(--border); margin-top: 8px; }
+        .timeline-item:last-child .line { display: none; }
+        .phase-blue { background: rgba(59,130,246,0.15); color: var(--accent); border: 2px solid var(--accent); }
+        .phase-purple { background: rgba(139,92,246,0.15); color: var(--accent2); border: 2px solid var(--accent2); }
+        .phase-green { background: rgba(16,185,129,0.15); color: var(--accent3); border: 2px solid var(--accent3); }
+
+        .phase-body {
+            background: var(--card); border: 1px solid var(--border);
+            border-radius: 20px; padding: 28px 30px; flex: 1;
+            transition: border-color 0.3s;
+        }
+        .phase-body:hover { border-color: rgba(59,130,246,0.3); }
+        .phase-label {
+            font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em;
+            text-transform: uppercase; margin-bottom: 6px;
+        }
+        .c-blue { color: var(--accent); }
+        .c-purple { color: var(--accent2); }
+        .c-green { color: var(--accent3); }
+        .phase-body h3 { font-size: 1.35rem; font-weight: 700; margin-bottom: 8px; }
+        .phase-body > p { font-size: 0.88rem; color: var(--muted); margin-bottom: 20px; line-height: 1.6; }
+        .features { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 20px; }
+        .feat { display: flex; align-items: flex-start; gap: 8px; font-size: 0.83rem; color: var(--text); line-height: 1.5; }
+        .feat i { color: var(--accent3); margin-top: 3px; font-size: 0.75rem; flex-shrink: 0; }
+
+        /* --- PAYMENT STRUCTURE --- */
+        .pay-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
+        .pay-card {
+            background: var(--card); border: 1px solid var(--border);
+            border-radius: 20px; padding: 28px 22px; text-align: center;
+            transition: border-color 0.3s, transform 0.3s; position: relative;
+        }
+        .pay-card.featured {
+            background: linear-gradient(145deg, #1a2a4a, #1e1040);
+            border: 1.5px solid var(--accent);
+            transform: scale(1.04);
+        }
+        .pay-card:hover:not(.featured) { border-color: rgba(59,130,246,0.4); transform: translateY(-4px); }
+        .pay-tag {
+            font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em;
+            text-transform: uppercase; color: var(--muted); margin-bottom: 10px;
+        }
+        .pay-pct { font-size: 3rem; font-weight: 800; font-family: 'Syne', sans-serif; margin-bottom: 4px; }
+        .pay-amt { font-size: 1.5rem; font-weight: 700; color: var(--accent); margin-bottom: 20px; }
+        .featured .pay-amt { color: #93c5fd; }
+        .pay-items { list-style: none; text-align: left; space-y: 8px; }
+        .pay-items li { font-size: 0.82rem; color: var(--muted); padding: 5px 0; border-bottom: 1px solid var(--border); }
+        .pay-items li:last-child { border: none; }
+        .pay-when { font-size: 0.72rem; color: var(--muted); margin-top: 16px; }
+        .featured .pay-when { color: #93c5fd; }
+
+        .total-bar {
+            background: var(--card); border: 1px solid var(--border);
+            border-radius: 16px; padding: 22px 28px;
+            display: flex; align-items: center; gap: 20px;
+        }
+        .total-icon {
+            width: 48px; height: 48px; border-radius: 12px;
+            background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.3);
+            display: flex; align-items: center; justify-content: center;
+            color: var(--accent); font-size: 1.2rem; flex-shrink: 0;
+        }
+        .total-bar h4 { font-size: 1rem; margin-bottom: 4px; }
+        .total-bar p { font-size: 0.83rem; color: var(--muted); }
+
+        /* --- DEPLOYMENT SECTION --- */
+        .deploy-section {
+            max-width: 1000px; margin: 0 auto;
+            padding: 0 40px 80px;
+        }
+        .deploy-header {
+            display: flex; align-items: center; gap: 16px;
+            background: linear-gradient(135deg, rgba(245,158,11,0.08), rgba(239,68,68,0.05));
+            border: 1px solid rgba(245,158,11,0.3);
+            border-radius: 20px; padding: 24px 28px; margin-bottom: 32px;
+        }
+        .deploy-icon {
+            width: 52px; height: 52px; flex-shrink: 0;
+            background: rgba(245,158,11,0.15); border: 1px solid rgba(245,158,11,0.4);
+            border-radius: 14px; display: flex; align-items: center; justify-content: center;
+            color: var(--warn); font-size: 1.3rem;
+        }
+        .deploy-header h2 { font-size: 1.4rem; margin-bottom: 4px; }
+        .deploy-header p { font-size: 0.85rem; color: var(--muted); }
+        .note-badge {
+            display: inline-block; background: rgba(245,158,11,0.15);
+            border: 1px solid rgba(245,158,11,0.4);
+            color: var(--warn); font-size: 0.7rem; font-weight: 700;
+            letter-spacing: 0.1em; text-transform: uppercase;
+            padding: 3px 10px; border-radius: 50px; margin-bottom: 8px;
+        }
+
+        .deploy-phase-title {
+            font-size: 1rem; font-weight: 700; margin: 32px 0 16px;
+            display: flex; align-items: center; gap: 10px;
+            padding-bottom: 10px; border-bottom: 1px solid var(--border);
+        }
+        .deploy-phase-title .pill {
+            font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em;
+            text-transform: uppercase; padding: 3px 10px; border-radius: 50px;
+        }
+        .pill-blue { background: rgba(59,130,246,0.15); color: var(--accent); }
+        .pill-purple { background: rgba(139,92,246,0.15); color: var(--accent2); }
+        .pill-green { background: rgba(16,185,129,0.15); color: var(--accent3); }
+
+        .deploy-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+        .deploy-card {
+            background: var(--card); border: 1px solid var(--border);
+            border-radius: 14px; padding: 20px 22px;
+            transition: border-color 0.25s;
+        }
+        .deploy-card:hover { border-color: rgba(245,158,11,0.3); }
+        .deploy-card h4 { font-size: 0.9rem; margin-bottom: 6px; font-weight: 600; }
+        .deploy-card p { font-size: 0.8rem; color: var(--muted); line-height: 1.6; margin-bottom: 10px; }
+        .deploy-cost {
+            font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.9rem;
+            color: var(--warn);
+        }
+        .deploy-freq {
+            font-size: 0.72rem; color: var(--muted); margin-left: 6px;
+        }
+
+        .deploy-total {
+            margin-top: 32px;
+            background: linear-gradient(135deg, rgba(245,158,11,0.06), rgba(239,68,68,0.04));
+            border: 1px solid rgba(245,158,11,0.25);
+            border-radius: 16px; padding: 24px 28px;
+        }
+        .deploy-total-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 16px; }
+        .deploy-total-item { text-align: center; }
+        .deploy-total-item .dval { font-family: 'Syne', sans-serif; font-size: 1.3rem; font-weight: 800; color: var(--warn); }
+        .deploy-total-item .dlabel { font-size: 0.75rem; color: var(--muted); margin-top: 4px; }
+
+        /* --- CTA --- */
+        .cta {
+            max-width: 1000px; margin: 0 auto 80px;
+            padding: 0 40px;
+        }
+        .cta-box {
+            background: var(--card); border: 1px solid var(--border);
+            border-radius: 24px; padding: 56px 40px; text-align: center;
+            position: relative; overflow: hidden;
+        }
+        .cta-box::before {
+            content: '';
+            position: absolute; top: -60px; right: -60px;
+            width: 250px; height: 250px; border-radius: 50%;
+            background: radial-gradient(circle, rgba(59,130,246,0.1), transparent);
+        }
+        .cta-box h2 { font-size: 2rem; margin-bottom: 12px; }
+        .cta-box p { color: var(--muted); margin-bottom: 32px; max-width: 500px; margin-left: auto; margin-right: auto; }
+        .cta-buttons { display: flex; gap: 14px; justify-content: center; }
+        .btn-ghost {
+            background: transparent; color: var(--text);
+            border: 1px solid var(--border); padding: 11px 26px; border-radius: 50px;
+            font-family: 'Syne', sans-serif; font-weight: 600; font-size: 0.85rem;
+            cursor: pointer; transition: border-color 0.2s;
+        }
+        .btn-ghost:hover { border-color: var(--accent); }
+
+        footer {
+            text-align: center; padding: 28px;
+            border-top: 1px solid var(--border);
+            font-size: 0.78rem; color: var(--muted);
+        }
+
+        @media (max-width: 768px) {
+            header { padding: 14px 20px; }
+            nav { display: none; }
+            .hero { padding: 60px 20px 40px; }
+            .hero-stats { gap: 24px; }
+            .section { padding: 60px 20px; }
+            .tech-grid, .pay-grid, .deploy-grid, .features { grid-template-columns: 1fr; }
+            .pay-card.featured { transform: none; }
+            .deploy-section { padding: 0 20px 60px; }
+            .cta { padding: 0 20px; }
+            .cta-buttons { flex-direction: column; align-items: center; }
+            .deploy-total-grid { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-900">
+<body>
 
-    <!-- Header / Hero Section -->
-    <header class="bg-white border-b sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-            <div class="flex items-center gap-2">
-                <div class="bg-blue-600 p-2 rounded-lg text-white">
-                    <i class="fas fa-graduation-cap"></i>
-                </div>
-                <span class="text-xl font-bold tracking-tight">Institute<span class="text-blue-600">Platform</span></span>
-            </div>
-            <nav class="hidden md:flex gap-8 text-sm font-medium text-gray-600">
-                <a href="#tech" class="hover:text-blue-600">Tech Stack</a>
-                <a href="#roadmap" class="hover:text-blue-600">Roadmap</a>
-                <a href="#pricing" class="hover:text-blue-600">Investment</a>
-            </nav>
-            <a href="#pricing" class="bg-blue-600 text-white px-5 py-2 rounded-full text-sm font-semibold hover:bg-blue-700 transition">Get Started</a>
+<header>
+    <div class="logo">
+        <div class="logo-icon"><i class="fas fa-graduation-cap"></i></div>
+        <span class="logo-text">Institute<span>Platform</span></span>
+    </div>
+    <nav>
+        <a href="#tech">Tech Stack</a>
+        <a href="#roadmap">Roadmap</a>
+        <a href="#investment">Investment</a>
+        <a href="#deployment">Deployment</a>
+    </nav>
+    <a href="#investment" class="btn-primary">View Pricing</a>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+    <div class="hero-tag">Project Proposal 2024</div>
+    <h1>Build Your <span class="grad">Digital Institute</span><br>from Ground Up</h1>
+    <p>A comprehensive 6-month plan to build a scalable online learning system with mentorship, course management, and automated payment workflows.</p>
+    <div class="hero-stats">
+        <div class="hero-stat"><div class="val">6</div><div class="label">Months Timeline</div></div>
+        <div class="hero-stat"><div class="val">3</div><div class="label">Development Phases</div></div>
+        <div class="hero-stat"><div class="val">₹55K</div><div class="label">Total Dev Cost</div></div>
+        <div class="hero-stat"><div class="val">100%</div><div class="label">Source Code Handover</div></div>
+    </div>
+</section>
+
+<!-- TECH STACK -->
+<div class="section" id="tech">
+    <h2 class="section-title">Technology Stack</h2>
+    <p class="section-sub">Industry-grade, battle-tested technologies chosen for performance and scalability.</p>
+    <div class="tech-grid">
+        <div class="tech-card">
+            <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/spring/spring-original.svg" alt="Spring Boot">
+            <h3>Backend — Spring Boot</h3>
+            <p>Java-based secure, robust API architecture with JWT auth and role-based access.</p>
         </div>
-    </header>
+        <div class="tech-card">
+            <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/react/react-original.svg" alt="React">
+            <h3>Frontend — React.js</h3>
+            <p>High-performance, dynamic, and fully responsive student and admin interfaces.</p>
+        </div>
+        <div class="tech-card">
+            <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/mysql/mysql-original.svg" alt="MySQL">
+            <h3>Database — MySQL</h3>
+            <p>Reliable relational database for user, course, and payment data management.</p>
+        </div>
+    </div>
+</div>
 
-    <main class="max-w-5xl mx-auto px-4 py-12">
-        <!-- Introduction -->
-        <section class="text-center mb-20">
-            <h1 class="text-4xl md:text-5xl font-extrabold mb-6 tracking-tight">Project Development <span class="gradient-text">Roadmap</span></h1>
-            <p class="text-lg text-gray-600 max-w-2xl mx-auto">A comprehensive 6-month plan to build a scalable online learning system with mentorship, course management, and automated payment workflows.</p>
-        </section>
+<!-- ROADMAP -->
+<div class="section" id="roadmap">
+    <h2 class="section-title">Implementation Roadmap</h2>
+    <p class="section-sub">Three focused phases over 6 months — from core architecture to production launch.</p>
+    <div class="timeline">
 
-        <!-- Tech Stack Section -->
-        <section id="tech" class="mb-20">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="bg-white p-6 rounded-2xl border shadow-sm flex flex-col items-center text-center">
-                    <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/spring/spring-original.svg" class="w-12 h-12 mb-4" alt="Spring Boot">
-                    <h3 class="font-bold text-lg">Backend</h3>
-                    <p class="text-sm text-gray-500">Spring Boot (Java) for a secure, robust, and scalable API architecture.</p>
-                </div>
-                <div class="bg-white p-6 rounded-2xl border shadow-sm flex flex-col items-center text-center">
-                    <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/react/react-original.svg" class="w-12 h-12 mb-4" alt="React">
-                    <h3 class="font-bold text-lg">Frontend</h3>
-                    <p class="text-sm text-gray-500">React.js for a high-performance, dynamic, and responsive user experience.</p>
-                </div>
-                <div class="bg-white p-6 rounded-2xl border shadow-sm flex flex-col items-center text-center">
-                    <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/mysql/mysql-original.svg" class="w-12 h-12 mb-4" alt="MySQL">
-                    <h3 class="font-bold text-lg">Database</h3>
-                    <p class="text-sm text-gray-500">MySQL for reliable data management and complex enrollment relationships.</p>
+        <!-- Phase 1 -->
+        <div class="timeline-item">
+            <div class="timeline-left">
+                <div class="phase-num phase-blue">1</div>
+                <div class="line"></div>
+            </div>
+            <div class="phase-body">
+                <div class="phase-label c-blue">Phase 01 — Months 1–2</div>
+                <h3>Core Foundation & Management</h3>
+                <p>Building the engine: Authentication, database architecture, video streaming, and course modules.</p>
+                <div class="features">
+                    <div class="feat"><i class="fas fa-check-circle"></i> Secure JWT Student & Admin Auth</div>
+                    <div class="feat"><i class="fas fa-check-circle"></i> Cloudinary Video Streaming</div>
+                    <div class="feat"><i class="fas fa-check-circle"></i> Admin Course CRUD System</div>
+                    <div class="feat"><i class="fas fa-check-circle"></i> PDF Note Upload/Download</div>
+                    <div class="feat"><i class="fas fa-check-circle"></i> Dynamic Pricing & Discount Logic</div>
+                    <div class="feat"><i class="fas fa-check-circle"></i> Database Schema v1.0</div>
                 </div>
             </div>
-        </section>
+        </div>
 
-        <!-- Roadmap Timeline Section -->
-        <section id="roadmap" class="mb-24">
-            <h2 class="text-3xl font-bold mb-12 text-center">Implementation Timeline</h2>
-            
-            <div class="relative space-y-12">
-                <!-- Phase 1 -->
-                <div class="relative pl-16 step-line">
-                    <div class="absolute left-0 top-0 bg-blue-600 text-white w-10 h-10 rounded-full flex items-center justify-center font-bold z-10 shadow-lg">1</div>
-                    <div class="phase-card bg-white p-8 rounded-2xl border border-gray-200 shadow-sm">
-                        <div class="flex justify-between items-start mb-4">
-                            <div>
-                                <span class="text-blue-600 font-bold text-sm uppercase tracking-widest">Phase 01 — Months 1-2</span>
-                                <h3 class="text-2xl font-bold mt-1">Core Foundation & Management</h3>
-                            </div>
-                        </div>
-                        <p class="text-gray-600 mb-6">Building the engine: Authentication, Database architecture, and Course modules.</p>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <ul class="space-y-2 text-sm text-gray-700">
-                                <li class="flex items-center gap-2"><i class="fas fa-check-circle text-green-500"></i> Secure JWT Student & Admin Auth</li>
-                                <li class="flex items-center gap-2"><i class="fas fa-check-circle text-green-500"></i> Admin Course CRUD (Edit/Delete/Create)</li>
-                                <li class="flex items-center gap-2"><i class="fas fa-check-circle text-green-500"></i> Dynamic Pricing & Discount Logic</li>
-                            </ul>
-                            <ul class="space-y-2 text-sm text-gray-700">
-                                <li class="flex items-center gap-2"><i class="fas fa-check-circle text-green-500"></i> Cloudinary Video Streaming Integration</li>
-                                <li class="flex items-center gap-2"><i class="fas fa-check-circle text-green-500"></i> PDF Note Upload/Download System</li>
-                                <li class="flex items-center gap-2"><i class="fas fa-check-circle text-green-500"></i> Database Schema Version 1.0</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Phase 2 -->
-                <div class="relative pl-16 step-line">
-                    <div class="absolute left-0 top-0 bg-purple-600 text-white w-10 h-10 rounded-full flex items-center justify-center font-bold z-10 shadow-lg">2</div>
-                    <div class="phase-card bg-white p-8 rounded-2xl border border-gray-200 shadow-sm">
-                        <div class="flex justify-between items-start mb-4">
-                            <div>
-                                <span class="text-purple-600 font-bold text-sm uppercase tracking-widest">Phase 02 — Months 3-4</span>
-                                <h3 class="text-2xl font-bold mt-1">Payments & Mentorship Ecosystem</h3>
-                            </div>
-                        </div>
-                        <p class="text-gray-600 mb-6">Commercializing the platform with Razorpay and the advanced Mentorship booking system.</p>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <ul class="space-y-2 text-sm text-gray-700">
-                                <li class="flex items-center gap-2"><i class="fas fa-check-circle text-green-500"></i> Razorpay Payment Gateway Integration</li>
-                                <li class="flex items-center gap-2"><i class="fas fa-check-circle text-green-500"></i> Price Locking at Checkout Logic</li>
-                                <li class="flex items-center gap-2"><i class="fas fa-check-circle text-green-500"></i> Free/Paid Mentorship Requests</li>
-                            </ul>
-                            <ul class="space-y-2 text-sm text-gray-700">
-                                <li class="flex items-center gap-2"><i class="fas fa-check-circle text-green-500"></i> 1-on-1 Scheduling (Meet/Teams links)</li>
-                                <li class="flex items-center gap-2"><i class="fas fa-check-circle text-green-500"></i> Auto-Refund System (On Rejection)</li>
-                                <li class="flex items-center gap-2"><i class="fas fa-check-circle text-green-500"></i> Rescheduling Rules Engine (24h rule)</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Phase 3 -->
-                <div class="relative pl-16">
-                    <div class="absolute left-0 top-0 bg-emerald-600 text-white w-10 h-10 rounded-full flex items-center justify-center font-bold z-10 shadow-lg">3</div>
-                    <div class="phase-card bg-white p-8 rounded-2xl border border-gray-200 shadow-sm">
-                        <div class="flex justify-between items-start mb-4">
-                            <div>
-                                <span class="text-emerald-600 font-bold text-sm uppercase tracking-widest">Phase 03 — Months 5-6</span>
-                                <h3 class="text-2xl font-bold mt-1">Dashboards, Emails & Launch</h3>
-                            </div>
-                        </div>
-                        <p class="text-gray-600 mb-6">Finalizing the user experience with personalized dashboards and automated notifications.</p>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <ul class="space-y-2 text-sm text-gray-700">
-                                <li class="flex items-center gap-2"><i class="fas fa-check-circle text-green-500"></i> Comprehensive Admin Dashboard</li>
-                                <li class="flex items-center gap-2"><i class="fas fa-check-circle text-green-500"></i> Student Learning Portal & History</li>
-                                <li class="flex items-center gap-2"><i class="fas fa-check-circle text-green-500"></i> Email Reminders (24h & 2h before)</li>
-                            </ul>
-                            <ul class="space-y-2 text-sm text-gray-700">
-                                <li class="flex items-center gap-2"><i class="fas fa-check-circle text-green-500"></i> CDN Optimization & Media Security</li>
-                                <li class="flex items-center gap-2"><i class="fas fa-check-circle text-green-500"></i> Responsive UI / UX Polish</li>
-                                <li class="flex items-center gap-2"><i class="fas fa-check-circle text-green-500"></i> Production Deployment & Handover</li>
-                            </ul>
-                        </div>
-                    </div>
+        <!-- Phase 2 -->
+        <div class="timeline-item">
+            <div class="timeline-left">
+                <div class="phase-num phase-purple">2</div>
+                <div class="line"></div>
+            </div>
+            <div class="phase-body">
+                <div class="phase-label c-purple">Phase 02 — Months 3–4</div>
+                <h3>Payments & Mentorship Ecosystem</h3>
+                <p>Commercializing the platform with Razorpay integration and advanced mentorship booking system.</p>
+                <div class="features">
+                    <div class="feat"><i class="fas fa-check-circle"></i> Razorpay Payment Gateway</div>
+                    <div class="feat"><i class="fas fa-check-circle"></i> 1-on-1 Scheduling (Meet/Teams)</div>
+                    <div class="feat"><i class="fas fa-check-circle"></i> Price Locking at Checkout</div>
+                    <div class="feat"><i class="fas fa-check-circle"></i> Auto-Refund on Rejection</div>
+                    <div class="feat"><i class="fas fa-check-circle"></i> Free/Paid Mentorship Requests</div>
+                    <div class="feat"><i class="fas fa-check-circle"></i> 24h Rescheduling Rules Engine</div>
                 </div>
             </div>
-        </section>
+        </div>
 
-        <!-- Pricing / Payment Structure -->
-        <section id="pricing" class="mb-20">
-            <h2 class="text-3xl font-bold mb-4 text-center">Investment Structure</h2>
-            <p class="text-gray-600 text-center mb-12">Professional development for a scalable, high-security institution platform.</p>
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Advance -->
-                <div class="bg-white border rounded-3xl p-8 text-center flex flex-col hover:shadow-xl transition">
-                    <span class="text-gray-500 text-sm font-semibold mb-2">Project Kickoff</span>
-                    <h3 class="text-4xl font-extrabold mb-6">40%</h3>
-                    <div class="text-2xl font-bold text-blue-600 mb-4">₹60,000</div>
-                    <ul class="text-sm text-gray-600 space-y-3 mb-8 flex-1">
-                        <li>Requirement Finalization</li>
-                        <li>UI/UX Wireframing</li>
-                        <li>Architecture Setup</li>
-                    </ul>
-                    <span class="text-xs text-gray-400">Due at signing</span>
-                </div>
-
-                <!-- Mid-way -->
-                <div class="bg-blue-600 border rounded-3xl p-8 text-center text-white flex flex-col shadow-xl scale-105">
-                    <span class="text-blue-100 text-sm font-semibold mb-2">Completion of Phase 2</span>
-                    <h3 class="text-4xl font-extrabold mb-6">30%</h3>
-                    <div class="text-2xl font-bold text-white mb-4">₹45,000</div>
-                    <ul class="text-sm text-blue-100 space-y-3 mb-8 flex-1">
-                        <li>Functional Payments</li>
-                        <li>Mentorship System</li>
-                        <li>Admin Controls Live</li>
-                    </ul>
-                    <span class="text-xs text-blue-200">After functional demo</span>
-                </div>
-
-                <!-- Final -->
-                <div class="bg-white border rounded-3xl p-8 text-center flex flex-col hover:shadow-xl transition">
-                    <span class="text-gray-500 text-sm font-semibold mb-2">Deployment</span>
-                    <h3 class="text-4xl font-extrabold mb-6">30%</h3>
-                    <div class="text-2xl font-bold text-blue-600 mb-4">₹45,000</div>
-                    <ul class="text-sm text-gray-600 space-y-3 mb-8 flex-1">
-                        <li>Student Dashboard</li>
-                        <li>Email Automation</li>
-                        <li>Cloud Handover</li>
-                    </ul>
-                    <span class="text-xs text-gray-400">Upon final delivery</span>
+        <!-- Phase 3 -->
+        <div class="timeline-item">
+            <div class="timeline-left">
+                <div class="phase-num phase-green">3</div>
+            </div>
+            <div class="phase-body">
+                <div class="phase-label c-green">Phase 03 — Months 5–6</div>
+                <h3>Dashboards, Emails & Launch</h3>
+                <p>Finalizing the user experience with personalized dashboards and automated notifications before handover.</p>
+                <div class="features">
+                    <div class="feat"><i class="fas fa-check-circle"></i> Comprehensive Admin Dashboard</div>
+                    <div class="feat"><i class="fas fa-check-circle"></i> CDN Optimization & Media Security</div>
+                    <div class="feat"><i class="fas fa-check-circle"></i> Student Learning Portal & History</div>
+                    <div class="feat"><i class="fas fa-check-circle"></i> Responsive UI/UX Polish</div>
+                    <div class="feat"><i class="fas fa-check-circle"></i> Email Reminders (24h & 2h before)</div>
+                    <div class="feat"><i class="fas fa-check-circle"></i> Production Deployment & Handover</div>
                 </div>
             </div>
+        </div>
 
-            <div class="mt-12 bg-gray-100 p-6 rounded-2xl flex flex-col md:flex-row items-center gap-6">
-                <div class="bg-blue-100 text-blue-600 p-4 rounded-full">
-                    <i class="fas fa-shield-alt text-2xl"></i>
-                </div>
-                <div>
-                    <h4 class="font-bold">Total Project Estimate: ₹1,50,000</h4>
-                    <p class="text-sm text-gray-600">This includes 6 months of dedicated development, testing, deployment, and 30 days of post-launch bug support.</p>
-                </div>
+    </div>
+</div>
+
+<!-- PAYMENT STRUCTURE -->
+<div class="section" id="investment">
+    <h2 class="section-title">Development Investment</h2>
+    <p class="section-sub">Milestone-based payments tied directly to deliverables — no upfront surprises.</p>
+    <div class="pay-grid">
+        <div class="pay-card">
+            <div class="pay-tag">Project Kickoff</div>
+            <div class="pay-pct">20%</div>
+            <div class="pay-amt">₹11,000</div>
+            <ul class="pay-items">
+                <li>Requirement Finalization</li>
+                <li>UI/UX Wireframing</li>
+                <li>Architecture Setup</li>
+            </ul>
+            <div class="pay-when">Due at signing</div>
+        </div>
+        <div class="pay-card featured">
+            <div class="pay-tag" style="color:#93c5fd;">Completion of Phase 2</div>
+            <div class="pay-pct">40%</div>
+            <div class="pay-amt">₹22,000</div>
+            <ul class="pay-items">
+                <li>Functional Payments Live</li>
+                <li>Mentorship System Live</li>
+                <li>Admin Controls Active</li>
+            </ul>
+            <div class="pay-when">After functional demo</div>
+        </div>
+        <div class="pay-card">
+            <div class="pay-tag">Final Delivery</div>
+            <div class="pay-pct">40%</div>
+            <div class="pay-amt">₹22,000</div>
+            <ul class="pay-items">
+                <li>Student Dashboard Ready</li>
+                <li>Email Automation Active</li>
+                <li>Cloud Handover Complete</li>
+            </ul>
+            <div class="pay-when">Upon final delivery</div>
+        </div>
+    </div>
+    <div class="total-bar">
+        <div class="total-icon"><i class="fas fa-shield-alt"></i></div>
+        <div>
+            <h4>Total Development Cost: ₹55,000</h4>
+            <p>6 months of dedicated development, testing & deployment handover. <strong>Note:</strong> Deployment/hosting charges are billed separately as additional costs — see breakdown below.</p>
+        </div>
+    </div>
+</div>
+
+<!-- DEPLOYMENT CHARGES — ADDITIONAL -->
+<div class="deploy-section" id="deployment">
+    <div class="deploy-header">
+        <div class="deploy-icon"><i class="fas fa-server"></i></div>
+        <div>
+            <div class="note-badge">⚠ Additional Charges</div>
+            <h2>Deployment & Infrastructure Costs</h2>
+            <p>These are <strong>not included</strong> in the ₹55,000 development fee. These are third-party platform charges billed to you directly or passed through at cost.</p>
+        </div>
+    </div>
+
+    <!-- Phase 1 Deploy -->
+    <div class="deploy-phase-title">
+        <span class="pill pill-blue">Phase 1</span> Initial Setup & Hosting
+    </div>
+    <div class="deploy-grid">
+        <div class="deploy-card">
+            <h4><i class="fas fa-globe" style="color:var(--accent);margin-right:8px;"></i>Domain Name Registration</h4>
+            <p>Custom domain (e.g., www.yoursite.com) with privacy protection and 1-year renewal.</p>
+            <div><span class="deploy-cost">₹500 – ₹1,500</span><span class="deploy-freq">/ year</span></div>
+        </div>
+        <div class="deploy-card">
+            <h4><i class="fas fa-cloud" style="color:var(--accent);margin-right:8px;"></i>Hosting Costs</h4>
+            <p>Cloud hosting via AWS, DigitalOcean, or shared server depending on traffic requirements.</p>
+            <div><span class="deploy-cost">₹1,000 – ₹30,000</span><span class="deploy-freq">/ month</span></div>
+        </div>
+        <div class="deploy-card">
+            <h4><i class="fas fa-lock" style="color:var(--accent);margin-right:8px;"></i>SSL Certificate</h4>
+            <p>HTTPS security for user data protection and SEO ranking. Includes annual renewal.</p>
+            <div><span class="deploy-cost">₹1,000 – ₹5,000</span><span class="deploy-freq">/ year</span></div>
+        </div>
+    </div>
+
+    <!-- Phase 2 Deploy -->
+    <div class="deploy-phase-title">
+        <span class="pill pill-purple">Phase 2</span> Infrastructure Setup & Integration
+    </div>
+    <div class="deploy-grid">
+        <div class="deploy-card">
+            <h4><i class="fas fa-database" style="color:var(--accent2);margin-right:8px;"></i>Database Hosting</h4>
+            <p>MySQL / PostgreSQL on a managed cloud platform for storing user, course, and payment data.</p>
+            <div><span class="deploy-cost">₹1,500 – ₹5,000</span><span class="deploy-freq">/ month</span></div>
+        </div>
+        <div class="deploy-card">
+            <h4><i class="fas fa-network-wired" style="color:var(--accent2);margin-right:8px;"></i>CDN Setup</h4>
+            <p>AWS CloudFront or Cloudflare for fast global delivery of videos and static content.</p>
+            <div><span class="deploy-cost">₹1,500 – ₹10,000</span><span class="deploy-freq">/ month</span></div>
+        </div>
+        <div class="deploy-card">
+            <h4><i class="fas fa-envelope" style="color:var(--accent2);margin-right:8px;"></i>Email Service</h4>
+            <p>SendGrid or Mailgun for transactional emails: reminders, confirmations, course updates.</p>
+            <div><span class="deploy-cost">₹2,500 – ₹10,000</span><span class="deploy-freq">/ month</span></div>
+        </div>
+        <div class="deploy-card">
+            <h4><i class="fas fa-code-branch" style="color:var(--accent2);margin-right:8px;"></i>CI/CD Pipeline</h4>
+            <p>Automated deployment pipeline for continuous delivery and integration of updates.</p>
+            <div><span class="deploy-cost">₹1,500 – ₹5,000</span><span class="deploy-freq">/ month</span></div>
+        </div>
+    </div>
+
+    <!-- Phase 3 Deploy -->
+    <div class="deploy-phase-title">
+        <span class="pill pill-green">Phase 3</span> Post-Launch & Ongoing Maintenance
+    </div>
+    <div class="deploy-grid">
+        <div class="deploy-card">
+            <h4><i class="fas fa-tools" style="color:var(--accent3);margin-right:8px;"></i>Maintenance & Support</h4>
+            <p>Bug fixes, feature patches, and server management to keep the platform secure and updated.</p>
+            <div><span class="deploy-cost">₹5,500 – ₹11,000</span><span class="deploy-freq">/ year</span></div>
+        </div>
+        <div class="deploy-card">
+            <h4><i class="fas fa-shield-virus" style="color:var(--accent3);margin-right:8px;"></i>Security Services</h4>
+            <p>DDoS protection, malware scanning, and vulnerability assessments for user data safety.</p>
+            <div><span class="deploy-cost">₹5,000 – ₹20,000</span><span class="deploy-freq">/ year</span></div>
+        </div>
+        <div class="deploy-card">
+            <h4><i class="fas fa-chart-line" style="color:var(--accent3);margin-right:8px;"></i>Analytics & Monitoring</h4>
+            <p>User activity tracking, performance monitoring and error logging (New Relic, Sentry).</p>
+            <div><span class="deploy-cost">₹1,500 – ₹10,000</span><span class="deploy-freq">/ month</span></div>
+        </div>
+        <div class="deploy-card">
+            <h4><i class="fas fa-sync-alt" style="color:var(--accent3);margin-right:8px;"></i>Ongoing Cloud Costs</h4>
+            <p>Recurring costs for cloud services, database management, CDN, and other subscriptions.</p>
+            <div><span class="deploy-cost">₹5,000 – ₹20,000</span><span class="deploy-freq">/ month</span></div>
+        </div>
+    </div>
+
+    <!-- Estimated Deploy Total -->
+    <div class="deploy-total">
+        <div class="note-badge">Estimated Range</div>
+        <h3 style="margin: 8px 0 4px; font-size:1.1rem;">Approximate Deployment Spend</h3>
+        <p style="font-size:0.82rem; color:var(--muted);">Ranges depend on traffic, storage, and selected service tiers. Final amounts are paid directly to third-party providers.</p>
+        <div class="deploy-total-grid">
+            <div class="deploy-total-item">
+                <div class="dval">₹3K – ₹37K</div>
+                <div class="dlabel">One-time Setup Costs</div>
             </div>
-        </section>
-
-        <!-- Final CTA -->
-        <section class="bg-slate-900 rounded-3xl p-12 text-center text-white">
-            <h2 class="text-3xl font-bold mb-4">Ready to build your digital institute?</h2>
-            <p class="text-slate-400 mb-8 max-w-xl mx-auto">Let's discuss the specific requirements for your courses and mentorship logic to refine the Phase 1 documentation.</p>
-            <div class="flex flex-col md:flex-row gap-4 justify-center">
-                <button class="bg-blue-600 hover:bg-blue-700 px-8 py-3 rounded-full font-bold transition">Accept Proposal</button>
-                <button class="bg-slate-800 hover:bg-slate-700 px-8 py-3 rounded-full font-bold transition">Download PDF</button>
+            <div class="deploy-total-item">
+                <div class="dval">₹13K – ₹75K</div>
+                <div class="dlabel">Monthly Running Costs</div>
             </div>
-        </section>
-    </main>
+            <div class="deploy-total-item">
+                <div class="dval">₹11K – ₹31K</div>
+                <div class="dlabel">Annual Recurring Costs</div>
+            </div>
+        </div>
+    </div>
+</div>
 
-    <footer class="py-12 text-center text-gray-500 text-sm">
-        <p>© 2024 Development Proposal — Created for Institute Platform Project</p>
-    </footer>
+<!-- CTA -->
+<div class="cta">
+    <div class="cta-box">
+        <h2>Ready to get started?</h2>
+        <p>Let's discuss your specific course requirements and mentorship logic to finalize the Phase 1 documentation.</p>
+        <div class="cta-buttons">
+            <button class="btn-primary">Accept Proposal</button>
+            <button class="btn-ghost">Download PDF</button>
+        </div>
+    </div>
+</div>
+
+<footer>
+    © 2024 Development Proposal — Institute Platform Project &nbsp;·&nbsp; Deployment charges are subject to change based on selected providers and traffic.
+</footer>
 
 </body>
 </html>
